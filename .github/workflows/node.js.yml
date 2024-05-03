@@ -27,6 +27,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        
+    - uses: actions/cache@v3
+      if: runner.os != 'windows'
+      with:
+        path: |
+          ~/.deno
+          ~/Library/Caches/deno
+        key: ${{ runner.os }}-deno-${{ hashFiles('**/deps.ts') }}
+      
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
